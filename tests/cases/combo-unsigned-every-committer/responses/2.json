@@ -1,0 +1,75 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "c000001000000000000000000000000000000000",
+        "committer": {
+          "name": "Carol Example",
+          "email": "carol@example.com",
+          "user": {
+            "login": "carol"
+          }
+        },
+        "signature": null
+      },
+      "c1": {
+        "oid": "c000002000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@work.example",
+          "user": {
+            "login": "alice-work"
+          }
+        },
+        "signature": null
+      },
+      "c2": {
+        "oid": "c000003000000000000000000000000000000000",
+        "committer": {
+          "name": "example-bot",
+          "email": "bot@example.com",
+          "user": {
+            "login": "example-bot"
+          }
+        },
+        "signature": null
+      },
+      "c3": {
+        "oid": "c000004000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@workstation.local",
+          "user": null
+        },
+        "signature": null
+      },
+      "c4": {
+        "oid": "c000005000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "--local",
+          "user": null
+        },
+        "signature": null
+      },
+      "c5": {
+        "oid": "c000006000000000000000000000000000000000",
+        "committer": {
+          "name": "Dave Example",
+          "email": "dave@corp.example",
+          "user": null
+        },
+        "signature": null
+      },
+      "c6": {
+        "oid": "c000007000000000000000000000000000000000",
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com",
+          "user": null
+        },
+        "signature": null
+      }
+    }
+  }
+}
