@@ -37,7 +37,7 @@ When a pull request's head shares no history with its base, the compare endpoint
 
 ### Calling it
 
-Add a workflow like this to the repository, with the reference pinned to a full commit hash of this repository:
+Add a small workflow of its own to the repository, with the reference pinned to a full commit hash of this repository:
 
 ```yaml
 name: Verify Signatures
@@ -54,6 +54,8 @@ jobs:
     uses: shellicar/workflows/.github/workflows/verify-commit-signatures.yml@<full 40-character commit hash>
 ```
 
+It is its own check, required by the ruleset on its own, separately from the repository's CI `gate`. This repository does the same: `.github/workflows/verify-signatures.yml` calls the reusable workflow for its own pull requests.
+
 The workflow checks out `verify-commit-signatures.sh` from this repository at the same commit the caller pinned (`job.workflow_sha`), never from the pull request being checked.
 
 ### The check name
@@ -64,7 +66,7 @@ GitHub names the check `<caller job> / <called job>`. With the caller above, the
 verify-signatures / verify
 ```
 
-A ruleset that requires the check must require it by that name. A ruleset that still requires plain `verify-signatures` (the name of the per-repository copies this replaces) waits for a check that never reports.
+A ruleset requires that check by name, as well as the repository's `gate`. A ruleset that still requires plain `verify-signatures` (the name of the per-repository copies this replaces) waits for a check that never reports.
 
 ### Running it locally
 
@@ -121,10 +123,24 @@ Every case uses example data in the shape of GitHub's answers. The `combo-*` cas
 To run the suite under BusyBox sh and BusyBox's tools, as a check that the scripts use nothing beyond POSIX:
 
 ```sh
-docker run --rm -v "$PWD:/w:ro" alpine:3.20 sh /w/tests/docker-entry.sh
+docker run --rm -v "$PWD:/w:ro" alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc sh /w/tests/docker-entry.sh # alpine:3.20
 ```
 
-CI runs both (`.github/workflows/test.yml`).
+### Lint
+
+```sh
+sh scripts/lint.sh
+```
+
+It searches the whole repository for shell scripts (any `*.sh` file, or any file whose `#!` line names sh, dash or bash) and checks them with ShellCheck in POSIX mode (`-s sh`). It checks every workflow under `.github/workflows` with actionlint, which also runs ShellCheck on each workflow's `run:` steps. Both tools run in Docker, pinned by image digest.
+
+actionlint 1.7.12 does not know the `job.workflow_repository` and `job.workflow_sha` properties, which GitHub documents. `.github/actionlint.yaml` ignores only that error, and only in `.github/workflows/verify-commit-signatures.yml`.
+
+### CI
+
+`.github/workflows/ci.yml` runs the code checks on pull requests and on pushes to main. Its jobs are `lint`, `test-dash` and `test-busybox` (the logic tests under each shell). A final `gate` job needs all of them and fails unless each succeeded; a skipped job fails it too, since none of them is meant to skip. A ruleset can require the single check `gate`.
+
+The signature check is separate: `.github/workflows/verify-signatures.yml` runs the reusable workflow on this repository's own pull requests, as its own check (`verify-signatures / verify`). `.github/workflows/codeql.yml` runs CodeQL separately.
 
 `tests/local/` is ignored by git. It holds tests that run against real pull requests on one machine; they are never committed.
 
