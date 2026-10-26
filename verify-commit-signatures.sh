@@ -329,8 +329,8 @@ jq -nr --rawfile shas "$work/shas" --slurpfile results "$work/results" '
     if .committer.user != null then .committer.user.login
     else "\(.committer.name) <\(.committer.email)> (no GitHub account)" end;
 
-  # A field of a tab-separated record: tabs, carriage returns and line feeds become spaces.
-  # TODO(claude): undecided: whether control characters in GitHub data are shown as spaces in the per-commit lines (as here) or make the run fail with exit 3.
+  # A field of a tab-separated record: tabs, carriage returns and line feeds
+  # in the data from GitHub become spaces, so each commit stays on one line.
   def field: gsub("[\t\r\n]"; " ");
 
   # Escaping for GitHub workflow commands, as actions/toolkit does it: escape_data
@@ -393,8 +393,8 @@ if grep -q '^BAD' "$work/verdicts"; then
 fi
 
 # In GitHub Actions, each failing commit also gets an ::error annotation, which
-# shows on the pull request's checks without opening the log.
-# TODO(claude): undecided: what happens past the runner's limit of 10 error annotations per step (later ones are not shown; the log still lists every commit). Nothing extra for now.
+# shows on the pull request's checks without opening the log. The runner shows
+# at most 10 error annotations per step; the log still lists every commit.
 annotate=false
 if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
   annotate=true
