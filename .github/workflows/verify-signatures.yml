@@ -2,9 +2,7 @@ name: Verify Signatures
 
 # This repository's own pull requests are checked by the reusable workflow it
 # provides, called locally so a pull request is checked by the verifier it
-# contains. The check should be reported as "verify-signatures / verify"
-# (untested: inferred from other repositories' reusable workflows; the first
-# pull request here shows the real name).
+# contains. The check is reported as "verify-signatures / verify".
 
 on:
   pull_request:

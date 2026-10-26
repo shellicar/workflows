@@ -11,9 +11,8 @@ permissions:
   contents: read
 
 jobs:
-  # A caller's check should be named "<caller job> / verify" (untested:
-  # inferred from other repositories' reusable workflows; a caller's first pull
-  # request shows the real name).
+  # A caller's check is named "<caller job> / verify", as seen for this
+  # repository's own caller (untested for a caller in another repository).
   verify:
     runs-on: ubuntu-24.04
     permissions:
@@ -39,9 +38,9 @@ jobs:
           fi
 
       # Actions are pinned by full commit hash. The verifier comes from this
-      # workflow's own commit: the pinned one for a caller in another
-      # repository, the pull request's own for this repository's pull requests
-      # (untested until the first run).
+      # workflow's own commit: the pull request's own for this repository's
+      # pull requests (as seen on its first pull request), and the pinned one
+      # for a caller in another repository (untested).
       - name: Check out the verifier
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
