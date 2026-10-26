@@ -1,8 +1,8 @@
 name: Verify Signatures
 
 # This repository's own pull requests are checked by the reusable workflow it
-# provides. The check is reported as "verify-signatures / verify".
-# TODO(claude): undecided: whether this repository calls its own workflow locally (as here, so a pull request is checked by the verifier it contains) or pinned to a commit on main.
+# provides, called locally so a pull request is checked by the verifier it
+# contains. The check is reported as "verify-signatures / verify".
 
 on:
   pull_request:

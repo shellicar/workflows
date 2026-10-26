@@ -37,7 +37,7 @@ jobs:
             exit 1
           fi
 
-      # TODO(claude): undecided: whether third-party actions here are pinned by full commit hash (as here) or by major tag, as the other repos' workflows do.
+      # Actions are pinned by full commit hash.
       - name: Check out the verifier
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:

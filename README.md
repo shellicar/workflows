@@ -101,7 +101,7 @@ The runner keeps at most 10 error annotations per step, so past 10 failing commi
 |---|---|
 | 0 | every commit passed |
 | 1 | at least one commit failed a rule |
-| 2 | GitHub still answered 5xx or rate-limited after retries |
+| 2 | GitHub's answer was still 5xx, rate-limited or no answer after retries; running again later can help |
 | 3 | the commits could not be fetched or read, or the data was missing or unexpected |
 | 64 | bad usage |
 
@@ -167,6 +167,6 @@ For whoever works on `verify-commit-signatures.sh`. Everything is fetched before
 
 When a pull request's head shares no history with its base, the compare endpoint answers 404 ("No common ancestor"). The script then lists every commit reachable from head through GraphQL, which in that case are exactly the commits the pull request adds.
 
-5xx answers and rate limits (HTTP 429, a 403 with `X-RateLimit-Remaining: 0` or `Retry-After`, or a GraphQL `RATE_LIMITED` error) are retried twice, after 10 and then 30 seconds. Any other failure exits 3 at once.
+5xx answers, rate limits (HTTP 429, a 403 with `X-RateLimit-Remaining: 0` or `Retry-After`, or a GraphQL `RATE_LIMITED` error) and calls with no answer (gh fails before GitHub answers, as on a network failure) are retried twice, after 10 and then 30 seconds. If they still fail, the script exits 2. Any other failure exits 3 at once.
 
 Annotations are escaped the way `actions/toolkit` escapes workflow commands: `%`, carriage return and line feed in the message become `%25`, `%0D` and `%0A`, and the title also escapes `:` and `,`.

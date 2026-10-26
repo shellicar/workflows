@@ -13,7 +13,7 @@
 # Exit codes:
 #   0   every commit passed
 #   1   at least one commit failed a rule
-#   2   GitHub still answered 5xx or rate-limited after retries
+#   2   GitHub's answer was still 5xx, rate-limited or no answer after retries
 #   3   the commits could not be fetched or read, or the data was missing or unexpected
 #   64  bad usage
 #
@@ -81,7 +81,7 @@ else
 fi
 
 command -v gh >/dev/null 2>&1 || fail_data "gh is not installed"
-# TODO(claude): undecided: whether to depend on jq (preinstalled on GitHub's Ubuntu runners) or do all JSON work through gh's built-in --jq. Depends on jq for now.
+# jq is preinstalled on GitHub's Ubuntu runners.
 command -v jq >/dev/null 2>&1 || fail_data "jq is not installed"
 
 owner=${repo%%/*}
@@ -92,9 +92,10 @@ trap 'rm -rf "$work"' EXIT
 trap 'exit 130' INT TERM
 
 # api_try OUTFILE GH_API_ARGS...
-# Runs one gh api call and writes the response body to OUTFILE. Retries 5xx and
-# rate-limit answers, and exits 2 when they persist. Returns 1 on any other
-# failure, with the HTTP status in api_status and gh's message in $work/err.
+# Runs one gh api call and writes the response body to OUTFILE. Retries 5xx
+# answers, rate limits and calls with no answer, and exits 2 when they persist.
+# Returns 1 on any other failure, with the HTTP status in api_status and gh's
+# message in $work/err.
 api_try() {
   local out attempt rc headers delays delay transient
   out=$1
@@ -109,36 +110,42 @@ api_try() {
     headers=$(sed -n '2,/^$/p' "$work/resp")
     sed '1,/^$/d' "$work/resp" >"$out"
 
+    # A call that may succeed if made again: a 5xx answer, a rate limit, or no
+    # HTTP answer at all (gh failed before GitHub answered, as on a network failure).
     transient=""
     case $api_status in
-      5[0-9][0-9]) transient="HTTP $api_status" ;;
-      429) transient="HTTP 429 (rate limited)" ;;
+      5[0-9][0-9]) transient="answered HTTP $api_status" ;;
+      429) transient="answered HTTP 429 (rate limited)" ;;
       403)
         if printf '%s\n' "$headers" | grep -Eiq '^(x-ratelimit-remaining: 0|retry-after:)'; then
-          transient="HTTP 403 (rate limited)"
+          transient="answered HTTP 403 (rate limited)"
         fi
         ;;
       200)
         if jq -e '(.errors? // []) | map(select(.type? == "RATE_LIMITED")) | length > 0' "$out" >/dev/null 2>&1; then
-          transient="a GraphQL RATE_LIMITED error"
+          transient="answered with a GraphQL RATE_LIMITED error"
+        fi
+        ;;
+      '')
+        if [ "$rc" -ne 0 ]; then
+          transient="gave no answer ($(head -n 1 "$work/err" | cut -c1-200))"
         fi
         ;;
     esac
 
     if [ -n "$transient" ]; then
       if [ "$attempt" -ge "$ATTEMPTS" ]; then
-        printf 'error: GitHub still answered %s after %s attempts\n' "$transient" "$ATTEMPTS" >&2
+        printf 'error: GitHub still %s after %s attempts\n' "$transient" "$ATTEMPTS" >&2
         exit 2
       fi
       delay=${delays%% *}
       delays=${delays#* }
-      printf 'GitHub answered %s; retrying in %s seconds\n' "$transient" "$delay" >&2
+      printf 'GitHub %s; retrying in %s seconds\n' "$transient" "$delay" >&2
       sleep "$delay"
       attempt=$((attempt + 1))
       continue
     fi
 
-    # TODO(claude): undecided: whether network failures with no HTTP answer are retried. Not retried for now: they exit 3 at once.
     if [ "$rc" -ne 0 ] || [ "$api_status" != "200" ]; then
       return 1
     fi
@@ -210,8 +217,8 @@ list_by_compare() {
 }
 
 # Lists every commit reachable from head into $work/shas. When base and head
-# share no history, these are exactly the commits head adds.
-# TODO(claude): undecided: whether a pull request whose head shares no history with its base is checked through head's whole history (as here) or fails at once with exit 3.
+# share no history, these are exactly the commits head adds, so every one of
+# them is checked.
 list_by_history() {
   local cursor more got
   : >"$work/shas"
@@ -384,7 +391,8 @@ jq -nr --rawfile shas "$work/shas" --slurpfile results "$work/results" '
 
 [ "$(cut -f2 "$work/verdicts" | sort -u | wc -l | tr -d ' ')" -eq "$count" ] || fail_data "not every commit was evaluated"
 
-# TODO(claude): undecided: whether a commit whose data is unreadable stops the whole run (exit 3, no verdicts printed) or is reported alongside the other commits' verdicts. Stops the run for now.
+# Unreadable data for any commit stops the whole run with exit 3, and no
+# verdicts are printed.
 if grep -q '^BAD' "$work/verdicts"; then
   grep '^BAD' "$work/verdicts" | while IFS="$(printf '\t')" read -r _ sha problem; do
     printf 'error: %.7s: %s\n' "$sha" "$problem" >&2
