@@ -1,0 +1,1 @@
+In GitHub Actions, the annotation's message escapes %, carriage return and line feed as %25, %0D and %0A; the per-commit line shows the carriage return and line feed as spaces.

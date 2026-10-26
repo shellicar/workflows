@@ -1,0 +1,11 @@
+{
+  "status": "ahead",
+  "ahead_by": 1,
+  "behind_by": 0,
+  "total_commits": 1,
+  "commits": [
+    {
+      "sha": "d000001000000000000000000000000000000000"
+    }
+  ]
+}

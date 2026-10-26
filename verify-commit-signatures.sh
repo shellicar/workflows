@@ -329,6 +329,19 @@ jq -nr --rawfile shas "$work/shas" --slurpfile results "$work/results" '
     if .committer.user != null then .committer.user.login
     else "\(.committer.name) <\(.committer.email)> (no GitHub account)" end;
 
+  # A field of a tab-separated record: tabs, carriage returns and line feeds become spaces.
+  # TODO(claude): undecided: whether control characters in GitHub data are shown as spaces in the per-commit lines (as here) or make the run fail with exit 3.
+  def field: gsub("[\t\r\n]"; " ");
+
+  # Escaping for GitHub workflow commands, as actions/toolkit does it: escape_data
+  # for the message, escape_property for parameters such as title.
+  def escape_data: gsub("%"; "%25") | gsub("\r"; "%0D") | gsub("\n"; "%0A");
+  def escape_property: escape_data | gsub(":"; "%3A") | gsub(","; "%2C");
+
+  # The ::error workflow command for a failing commit.
+  def annotation($sha; $j):
+    "::error title=\("Commit \($sha[0:7]) failed rule \($j.rule)" | escape_property)::\("\($sha[0:7]): \($j.reason)" | escape_data)";
+
   def judge:
     .signature as $g
     | if $g == null or $g.state == "UNSIGNED" then
@@ -354,16 +367,16 @@ jq -nr --rawfile shas "$work/shas" --slurpfile results "$work/results" '
   | ($results[$i]) as $c
   | ($c | problems($sha)) as $p
   | if ($p | length) > 0 then
-      $p[] | "BAD\t\($sha)\t\(.)"
+      $p[] | "BAD\t\($sha)\t\(field)"
     else
       $c
       | judge as $j
       | [
           $j.verdict, $sha,
-          "committer=\(committer_label)",
-          "signer=\(.signature.signer.login // "(none)")",
-          "state=\(.signature.state // "UNSIGNED")",
-          (if $j.verdict == "FAIL" then "rule=\($j.rule): \($j.reason)" else empty end)
+          ("committer=\(committer_label)" | field),
+          ("signer=\(.signature.signer.login // "(none)")" | field),
+          ("state=\(.signature.state // "UNSIGNED")" | field),
+          (if $j.verdict == "FAIL" then ("rule=\($j.rule): \($j.reason)" | field), annotation($sha; $j) else empty end)
         ]
       | join("\t")
     end
@@ -379,16 +392,27 @@ if grep -q '^BAD' "$work/verdicts"; then
   fail_data "the data for some commits is missing or unexpected, so no verdict is given"
 fi
 
+# In GitHub Actions, each failing commit also gets an ::error annotation, which
+# shows on the pull request's checks without opening the log.
+# TODO(claude): undecided: what happens past the runner's limit of 10 error annotations per step (later ones are not shown; the log still lists every commit). Nothing extra for now.
+annotate=false
+if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+  annotate=true
+fi
+
 printf 'Checking %s commits in %s (%s...%s)\n' "$count" "$repo" "$base" "$head"
 passed=0
 failed=0
-while IFS="$(printf '\t')" read -r verdict sha committer signer state detail; do
+while IFS="$(printf '\t')" read -r verdict sha committer signer state detail annotation; do
   if [ "$verdict" = "PASS" ]; then
     passed=$((passed + 1))
     printf '%.7s %s  %s  %s  %s\n' "$sha" "$verdict" "$committer" "$signer" "$state"
   else
     failed=$((failed + 1))
     printf '%.7s %s  %s  %s  %s  %s\n' "$sha" "$verdict" "$committer" "$signer" "$state" "$detail"
+    if [ "$annotate" = "true" ]; then
+      printf '%s\n' "$annotation"
+    fi
   fi
 done <"$work/verdicts"
 

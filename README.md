@@ -6,9 +6,11 @@ Shared GitHub Actions workflows for the shellicar repositories.
 
 `.github/workflows/verify-commit-signatures.yml` is a reusable workflow that checks every commit in a pull request. It runs `verify-commit-signatures.sh` from this repository.
 
-### What it checks, and why
+### Motivation
 
-The repositories squash-merge. The "main" ruleset's signed-commits rule only ever sees the squash commit GitHub makes, which GitHub signs itself, so it says nothing about the commits inside the pull request. This workflow is what checks those.
+Every commit in these repositories should be signed, by the identity that made it. Setting up signing on each machine does not guarantee that, so it is checked on every pull request. The repositories squash-merge, so the "main" ruleset's signed-commits rule only ever sees the squash commit GitHub makes, never the pull request's own commits.
+
+### What it checks
 
 A commit passes only when all three rules hold:
 
@@ -20,20 +22,17 @@ A commit passes only when all three rules hold:
 
 GitHub's `verified` flag alone is not enough: a key can be valid and still belong to someone other than the committer.
 
+> Untested: no commit signed with one account's key and committed as another account has been checked yet. A test pull request with such a commit would settle it: GitHub reporting it `VALID` with the two accounts confirms the claim, and the script should then fail it on `key-matches-committer`. If GitHub reports another state, such as `BAD_EMAIL`, the `valid` rule already fails it.
+
 The check fails closed. A failed or partial call, a missing field, an unexpected value or an empty commit list fails it. A rule that cannot be evaluated is a failure, never a skip.
 
-### How it reads GitHub
+### Permissions and calls
 
-Everything is fetched before anything is judged:
+The workflow needs `contents: read` and nothing else. It takes the pull request's base and head from the event, so it never reads the pull request itself.
 
-1. The REST compare endpoint (`compare/BASE...HEAD`) lists the pull request's commits, 100 per call.
-2. One GraphQL query per 100 commits reads each commit's signature (`state`, `isValid`, `wasSignedByGitHub`, `signer`) and committer.
+> Untested: so far the script has only been run with a personal login that can read everything. The first run in a calling repository settles it: the check passing there shows `contents: read` is enough, and a refusal (`Resource not accessible by integration`, exit 3) shows it is not.
 
-A pull request of up to 100 commits takes two calls. Both read only repository contents, so the workflow needs `contents: read` and nothing else. The base and head come from the pull request event, so the workflow never reads the pull request itself.
-
-When a pull request's head shares no history with its base, the compare endpoint refuses. The script then lists every commit reachable from head, which in that case are exactly the commits the pull request adds.
-
-5xx answers and rate limits (HTTP 429, a 403 with `X-RateLimit-Remaining: 0` or `Retry-After`, or a GraphQL `RATE_LIMITED` error) are retried twice, after 10 and then 30 seconds.
+It makes two calls for a pull request of up to 100 commits, and one more of each kind for every further 100 commits.
 
 ### Calling it
 
@@ -66,6 +65,8 @@ GitHub names the check `<caller job> / <called job>`. With the caller above, the
 verify-signatures / verify
 ```
 
+> Untested: this name is inferred from how GitHub names the checks of reusable workflows in another repository, not yet seen for this workflow. The first pull request in a calling repository settles it: the name shows in that pull request's list of checks.
+
 A ruleset requires that check by name, as well as the repository's `gate`. A ruleset that still requires plain `verify-signatures` (the name of the per-repository copies this replaces) waits for a check that never reports.
 
 ### Running it locally
@@ -85,6 +86,14 @@ c000001 FAIL  committer=alice  signer=(none)  state=UNSIGNED  rule=signed: the c
 c000002 PASS  committer=GitHub <noreply@github.com> (no GitHub account)  signer=web-flow  state=VALID
 1 of 2 commits failed.
 ```
+
+In GitHub Actions (`GITHUB_ACTIONS` is `true`) it also prints an `::error` annotation after each failing commit's line, naming the short hash, the rule and why, so the failure shows on the pull request's checks without opening the log:
+
+```
+::error title=Commit c000001 failed rule signed::c000001: the commit is not signed
+```
+
+The runner keeps at most 10 error annotations per step, so past 10 failing commits the rest show only in the log, which still lists every commit checked.
 
 ### Exit codes
 
@@ -115,10 +124,11 @@ Each directory in `tests/cases` is one case:
 | `responses/N.json` | the body of the Nth call's answer, served as HTTP 200 |
 | `responses/N.http` | the Nth call's whole answer: status line, headers, blank line, body |
 | `responses/N.exit` | the exit status gh gives for the Nth call, when it differs from the default |
-| `expected` | the expected exit code, number of calls, retry delays (when listed) and each commit's verdict and failed rule |
+| `github-actions` | the value of `GITHUB_ACTIONS` the script sees; without this file it sees an empty value |
+| `expected` | the expected exit code, number of calls, retry delays (when listed), each commit's verdict and failed rule, and any `::error` lines |
 | `description` | what the case covers |
 
-Every case uses example data in the shape of GitHub's answers. The `combo-*` cases cover each combination of author, committer, signer and state seen in practice; the `synthetic-*`, `retry-*`, `closed-*` and `usage-*` cases cover the other rules, retries, failures and bad usage.
+Every case uses example data in the shape of GitHub's answers. The `combo-*` cases cover each combination of author, committer, signer and state seen in practice; the `annotate-*` cases cover the annotations; the `synthetic-*`, `retry-*`, `closed-*` and `usage-*` cases cover the other rules, retries, failures and bad usage.
 
 To run the suite under BusyBox sh and BusyBox's tools, as a check that the scripts use nothing beyond POSIX:
 
@@ -147,3 +157,16 @@ The signature check is separate: `.github/workflows/verify-signatures.yml` runs 
 ### macOS
 
 The scripts are written for macOS's BSD tools as well, but have been run only on Linux (dash, and BusyBox in Docker). To check them on macOS, run `sh tests/run-logic-tests.sh` there.
+
+## Inside the script
+
+For whoever works on `verify-commit-signatures.sh`. Everything is fetched before anything is judged:
+
+1. The REST compare endpoint (`compare/BASE...HEAD`) lists the pull request's commits, 100 per call.
+2. One GraphQL query per 100 commits reads each commit's signature (`state`, `isValid`, `wasSignedByGitHub`, `signer`) and committer.
+
+When a pull request's head shares no history with its base, the compare endpoint answers 404 ("No common ancestor"). The script then lists every commit reachable from head through GraphQL, which in that case are exactly the commits the pull request adds.
+
+5xx answers and rate limits (HTTP 429, a 403 with `X-RateLimit-Remaining: 0` or `Retry-After`, or a GraphQL `RATE_LIMITED` error) are retried twice, after 10 and then 30 seconds. Any other failure exits 3 at once.
+
+Annotations are escaped the way `actions/toolkit` escapes workflow commands: `%`, carriage return and line feed in the message become `%25`, `%0D` and `%0A`, and the title also escapes `:` and `,`.

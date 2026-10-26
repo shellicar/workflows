@@ -1,0 +1,1 @@
+In GitHub Actions, a run that stops with exit 3 on unreadable data prints no annotation.
