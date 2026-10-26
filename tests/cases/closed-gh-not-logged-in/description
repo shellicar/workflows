@@ -1,0 +1,1 @@
+Synthetic: gh has no login or token, prints its message and exits 4 with no HTTP answer; running again won't help, so it is not retried

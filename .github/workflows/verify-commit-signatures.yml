@@ -12,13 +12,12 @@ permissions:
 
 jobs:
   # A caller's check is named "<caller job> / verify".
-  # TODO(claude): undecided: the name of this job, which becomes the second half of every caller's check name. "verify" for now.
   verify:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:
-      # TODO(claude): undecided: whether events other than pull_request (pull_request_target, merge_group) are supported. Only pull_request is, for now; anything else fails.
+      # Only pull_request events are supported; any other event fails the job.
       - name: Require a pull request event
         if: github.event_name != 'pull_request'
         env:

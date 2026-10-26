@@ -111,7 +111,9 @@ api_try() {
     sed '1,/^$/d' "$work/resp" >"$out"
 
     # A call that may succeed if made again: a 5xx answer, a rate limit, or no
-    # HTTP answer at all (gh failed before GitHub answered, as on a network failure).
+    # HTTP answer at all (gh failed before GitHub answered, as on a network
+    # failure). gh exit 4 means it has no login or token, which running again
+    # won't fix, so it is not retried.
     transient=""
     case $api_status in
       5[0-9][0-9]) transient="answered HTTP $api_status" ;;
@@ -127,7 +129,7 @@ api_try() {
         fi
         ;;
       '')
-        if [ "$rc" -ne 0 ]; then
+        if [ "$rc" -ne 0 ] && [ "$rc" -ne 4 ]; then
           transient="gave no answer ($(head -n 1 "$work/err" | cut -c1-200))"
         fi
         ;;
