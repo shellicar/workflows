@@ -1,0 +1,276 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "a000001000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "INVALID",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c1": {
+        "oid": "a000002000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "MALFORMED_SIG",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c2": {
+        "oid": "a000003000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "UNKNOWN_KEY",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c3": {
+        "oid": "a000004000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "BAD_EMAIL",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c4": {
+        "oid": "a000005000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "UNVERIFIED_EMAIL",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c5": {
+        "oid": "a000006000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "NO_USER",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c6": {
+        "oid": "a000007000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "UNKNOWN_SIG_TYPE",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c7": {
+        "oid": "a000008000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "GPGVERIFY_UNAVAILABLE",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c8": {
+        "oid": "a000009000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "GPGVERIFY_ERROR",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c9": {
+        "oid": "a000010000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "NOT_SIGNING_KEY",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c10": {
+        "oid": "a000011000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "EXPIRED_KEY",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c11": {
+        "oid": "a000012000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "OCSP_PENDING",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c12": {
+        "oid": "a000013000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "OCSP_ERROR",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c13": {
+        "oid": "a000014000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "BAD_CERT",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c14": {
+        "oid": "a000015000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "OCSP_REVOKED",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+name: CI
+
+# The code checks, for pull requests and main. The gate job at the end needs
+# every other job, so a ruleset can require the single check "gate". The
+# signature check is a separate workflow and check (verify-signatures.yml).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      # Actions are pinned by full commit hash.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: ShellCheck and actionlint
+        run: sh scripts/lint.sh
+
+  test-dash:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Logic tests (dash)
+        run: sh tests/run-logic-tests.sh
+
+  test-busybox:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Logic tests (BusyBox sh)
+        run: docker run --rm -v "$PWD:/w:ro" alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc sh /w/tests/docker-entry.sh # alpine:3.20
+
+  # Passes only when every needed job succeeded. A skipped job fails the gate
+  # as well as a failed or cancelled one: none of these jobs is meant to skip.
+  gate:
+    needs: [lint, test-dash, test-busybox]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require every needed job to have succeeded
+        env:
+          LINT: ${{ needs.lint.result }}
+          TEST_DASH: ${{ needs.test-dash.result }}
+          TEST_BUSYBOX: ${{ needs.test-busybox.result }}
+        shell: sh
+        run: |
+          failed=0
+          require() {
+            if [ "$2" = "success" ]; then
+              echo "$1: $2"
+            else
+              echo "$1: $2, which fails the gate"
+              failed=1
+            fi
+          }
+          require lint "$LINT"
+          require test-dash "$TEST_DASH"
+          require test-busybox "$TEST_BUSYBOX"
+          exit "$failed"

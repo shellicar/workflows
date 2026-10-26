@@ -1,0 +1,59 @@
+name: Verify Commit Signatures
+
+# Reusable workflow: checks every commit in the calling pull request with
+# verify-commit-signatures.sh, taken from this repository at the commit the
+# caller pinned. See README.md.
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  # A caller's check is named "<caller job> / verify", as seen for this
+  # repository's own caller and for a caller in another repository.
+  verify:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      # Only pull_request events are supported; any other event fails the job.
+      - name: Require a pull request event
+        if: github.event_name != 'pull_request'
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          echo "This workflow checks pull requests; it was called for a '$EVENT_NAME' event."
+          exit 1
+
+      - name: Find this workflow's own commit
+        env:
+          WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          WORKFLOW_SHA: ${{ job.workflow_sha }}
+        run: |
+          if [ -z "$WORKFLOW_REPOSITORY" ] || ! printf '%s' "$WORKFLOW_SHA" | grep -Eq '^[0-9a-f]{40}$'; then
+            echo "Could not tell which commit of the reusable workflow is running (repository '$WORKFLOW_REPOSITORY', commit '$WORKFLOW_SHA')."
+            exit 1
+          fi
+
+      # Actions are pinned by full commit hash. The verifier comes from this
+      # workflow's own commit: the pull request's own for this repository's
+      # pull requests, and the pinned one for a caller in another repository,
+      # a private one included. Both have been seen.
+      - name: Check out the verifier
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
+          path: .verify-commit-signatures
+          persist-credentials: false
+
+      - name: Verify commit signatures
+        shell: sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: sh .verify-commit-signatures/verify-commit-signatures.sh --repo "$REPOSITORY" --base "$BASE_SHA" --head "$HEAD_SHA"

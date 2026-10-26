@@ -1,0 +1,4 @@
+HTTP/2.0 500 Internal Server Error
+Content-Type: application/json
+
+{"message":"Server Error"}

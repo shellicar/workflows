@@ -1,0 +1,4 @@
+exit 1
+calls 2
+d000001 FAIL key-matches-committer
+::error title=Commit d000001 failed rule key-matches-committer::d000001: the key belongs to mallory%2525:x,y%0D%0Az, but the committer is alice

@@ -1,0 +1,3 @@
+exit 1
+calls 2
+d000001 FAIL signed

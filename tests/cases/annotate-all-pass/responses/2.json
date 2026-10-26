@@ -1,0 +1,40 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "d000001000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "user": {
+            "login": "alice"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "alice"
+          }
+        }
+      },
+      "c1": {
+        "oid": "d000002000000000000000000000000000000000",
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com",
+          "user": null
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": true,
+          "signer": {
+            "login": "web-flow"
+          }
+        }
+      }
+    }
+  }
+}

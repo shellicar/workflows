@@ -1,0 +1,1 @@
+In GitHub Actions, each failing commit gets one ::error annotation naming its short hash, the rule and why; the passing commit gets none.

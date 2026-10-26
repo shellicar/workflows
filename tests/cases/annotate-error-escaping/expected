@@ -1,0 +1,3 @@
+exit 3
+calls 1
+::error title=Signature check could not read the commits::GitHub request failed (HTTP no answer): token 100%25 missing  [31mrun gh auth login [0m

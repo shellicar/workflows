@@ -1,0 +1,60 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "a000001000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c1": {
+        "oid": "a000002000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "BAD_EMAIL",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c2": {
+        "oid": "a000003000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "UNKNOWN_KEY",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      }
+    }
+  }
+}

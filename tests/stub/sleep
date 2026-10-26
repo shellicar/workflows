@@ -1,0 +1,3 @@
+#!/bin/sh
+# Stands in for sleep in the logic tests: records the delay and returns at once.
+printf '%s\n' "$*" >>"$STUB_STATE/sleeps"

@@ -1,0 +1,71 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "d000001000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "user": {
+            "login": "alice"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "alice"
+          }
+        }
+      },
+      "c1": {
+        "oid": "d000002000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "user": {
+            "login": "alice"
+          }
+        },
+        "signature": null
+      },
+      "c2": {
+        "oid": "d000003000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "user": {
+            "login": "alice"
+          }
+        },
+        "signature": {
+          "state": "BAD_EMAIL",
+          "isValid": false,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "alice"
+          }
+        }
+      },
+      "c3": {
+        "oid": "d000004000000000000000000000000000000000",
+        "committer": {
+          "name": "Carol Example",
+          "email": "carol@example.com",
+          "user": {
+            "login": "carol"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "alice"
+          }
+        }
+      }
+    }
+  }
+}
