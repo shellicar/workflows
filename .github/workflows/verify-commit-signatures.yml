@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   # A caller's check is named "<caller job> / verify", as seen for this
-  # repository's own caller (untested for a caller in another repository).
+  # repository's own caller and for a caller in another repository.
   verify:
     runs-on: ubuntu-24.04
     permissions:
@@ -39,10 +39,10 @@ jobs:
 
       # Actions are pinned by full commit hash. The verifier comes from this
       # workflow's own commit: the pull request's own for this repository's
-      # pull requests (as seen on its first pull request), and the pinned one
-      # for a caller in another repository (untested).
+      # pull requests, and the pinned one for a caller in another repository,
+      # a private one included. Both have been seen.
       - name: Check out the verifier
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ job.workflow_repository }}
           ref: ${{ job.workflow_sha }}

@@ -57,9 +57,7 @@ It is its own check, required by the ruleset on its own, separately from the rep
 
 The workflow checks out `verify-commit-signatures.sh` from this repository at its own commit (`job.workflow_sha`). For a caller in another repository that is the commit the caller pinned, never the pull request being checked. For this repository's own pull requests, which call the workflow locally (`./`), it is the pull request's own version, so a pull request here that changes the script is checked by the changed script: one that makes the script pass everything passes its own check.
 
-The local case was seen on shellicar/workflows#1: the job ran the workflow at `refs/pull/1/merge`, and the "Check out the verifier" step checked out that same commit, the pull request's merge commit.
-
-> Untested: no repository has called the workflow pinned by hash yet. That caller's first pull request settles it: the "Check out the verifier" step's log should show the pinned commit.
+Both cases have been seen. On shellicar/workflows#1 the job ran the workflow at `refs/pull/1/merge`, and the "Check out the verifier" step checked out that same commit, the pull request's merge commit. On a pull request in another, private, repository that called the workflow pinned by hash, the job ran the workflow at the pinned commit and the step checked out that commit.
 
 ### The check name
 
@@ -69,9 +67,7 @@ GitHub names the check `<caller job> / <called job>`. With the caller above, the
 verify-signatures / verify
 ```
 
-This repository's own caller, whose job is also `verify-signatures`, reported the check as `verify-signatures / verify` on shellicar/workflows#1.
-
-> Untested: no caller in another repository, pinned by hash, has run yet. Its first pull request settles it: the name shows in that pull request's list of checks.
+That name has been seen both for this repository's own caller, on shellicar/workflows#1, and for a caller in another, private, repository pinned by hash, whose job is also `verify-signatures`.
 
 A ruleset requires that check by name, as well as the repository's `gate`. A ruleset that still requires plain `verify-signatures` (the name of the per-repository copies this replaces) waits for a check that never reports.
 
