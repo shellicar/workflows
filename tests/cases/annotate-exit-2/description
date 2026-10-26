@@ -1,0 +1,1 @@
+In GitHub Actions, a run that exits 2 after the compare call answers 502 on every attempt prints one ::error annotation carrying the error line.

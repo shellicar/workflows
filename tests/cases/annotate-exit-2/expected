@@ -1,0 +1,4 @@
+exit 2
+calls 3
+sleeps 10 30
+::error title=Signature check could not reach GitHub::GitHub still answered HTTP 502 after 3 attempts

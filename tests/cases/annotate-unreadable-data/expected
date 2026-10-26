@@ -1,0 +1,3 @@
+exit 3
+calls 2
+::error title=Signature check could not read the commits::the data for some commits is missing or unexpected, so no verdict is given

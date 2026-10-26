@@ -32,7 +32,7 @@ The workflow needs `contents: read` and nothing else. It takes the pull request'
 
 > Untested: so far the script has only been run with a personal login that can read everything. The first run in a calling repository settles it: the check passing there shows `contents: read` is enough, and a refusal (`Resource not accessible by integration`, exit 3) shows it is not.
 
-It makes two calls for a pull request of up to 100 commits, and one more of each kind for every further 100 commits.
+It makes two calls for a pull request of up to 100 commits, and one more of each kind for every further 100 commits. When the pull request's head shares no history with its base, the first call is refused and the commits are listed another way, so it makes at least three.
 
 ### Calling it
 
@@ -55,7 +55,9 @@ jobs:
 
 It is its own check, required by the ruleset on its own, separately from the repository's CI `gate`. This repository does the same: `.github/workflows/verify-signatures.yml` calls the reusable workflow for its own pull requests.
 
-The workflow checks out `verify-commit-signatures.sh` from this repository at the same commit the caller pinned (`job.workflow_sha`), never from the pull request being checked.
+The workflow checks out `verify-commit-signatures.sh` from this repository at its own commit (`job.workflow_sha`). For a caller in another repository that is the commit the caller pinned, never the pull request being checked. For this repository's own pull requests, which call the workflow locally (`./`), it is the pull request's own version, so a pull request here that changes the script is checked by the changed script: one that makes the script pass everything passes its own check.
+
+> Untested: the `job.workflow_sha` checkout has not run yet. The first run settles it: the log of the "Check out the verifier" step shows the commit it checked out.
 
 ### The check name
 
@@ -95,6 +97,14 @@ In GitHub Actions (`GITHUB_ACTIONS` is `true`) it also prints an `::error` annot
 
 The runner keeps at most 10 error annotations per step, so past 10 failing commits the rest show only in the log, which still lists every commit checked.
 
+When the run stops with exit 2 or 3, it prints the error as an `::error` annotation too, so the reason shows on the checks rather than only that the job failed:
+
+```
+::error title=Signature check could not read the commits::GitHub request failed (HTTP 403): Resource not accessible by integration
+```
+
+Control characters in the data from GitHub, such as a terminal escape in a committer's name, are printed as spaces, so none reaches the log.
+
 ### Exit codes
 
 | Code | Meaning |
@@ -104,6 +114,7 @@ The runner keeps at most 10 error annotations per step, so past 10 failing commi
 | 2 | GitHub's answer was still 5xx, rate-limited or no answer after retries; running again later can help |
 | 3 | the commits could not be fetched or read, or the data was missing or unexpected |
 | 64 | bad usage |
+| 130 | interrupted (SIGINT or SIGTERM) |
 
 ## Tests
 
@@ -124,13 +135,16 @@ Each directory in `tests/cases` is one case:
 | `responses/N.json` | the body of the Nth call's answer, served as HTTP 200 |
 | `responses/N.http` | the Nth call's whole answer: status line, headers, blank line, body |
 | `responses/N.exit` | the exit status gh gives for the Nth call, when it differs from the default |
+| `responses/N.stderr` | what gh prints to stderr for the Nth call, when it has neither `N.json` nor `N.http` |
 | `github-actions` | the value of `GITHUB_ACTIONS` the script sees; without this file it sees an empty value |
 | `expected` | the expected exit code, number of calls, retry delays (when listed), each commit's verdict and failed rule, and any `::error` lines |
 | `description` | what the case covers |
 
+A call with neither `responses/N.json` nor `responses/N.http` gets no answer: gh prints nothing to stdout and exits 1, or with `N.exit` when present, as it does when it reaches no server. The runner also fails any case whose output carries a control character other than the line ends.
+
 Every case uses example data in the shape of GitHub's answers. The `combo-*` cases cover each combination of author, committer, signer and state seen in practice; the `annotate-*` cases cover the annotations; the `synthetic-*`, `retry-*`, `closed-*` and `usage-*` cases cover the other rules, retries, failures and bad usage.
 
-To run the suite under BusyBox sh and BusyBox's tools, as a check that the scripts use nothing beyond POSIX:
+To run the suite under BusyBox sh and BusyBox's tools, which shows the scripts run under BusyBox as well as dash:
 
 ```sh
 docker run --rm -v "$PWD:/w:ro" alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc sh /w/tests/docker-entry.sh # alpine:3.20
@@ -142,7 +156,7 @@ docker run --rm -v "$PWD:/w:ro" alpine@sha256:d9e853e87e55526f6b2917df91a2115c36
 sh scripts/lint.sh
 ```
 
-It searches the whole repository for shell scripts (any `*.sh` file, or any file whose `#!` line names sh, dash or bash) and checks them with ShellCheck in POSIX mode (`-s sh`). It checks every workflow under `.github/workflows` with actionlint, which also runs ShellCheck on each workflow's `run:` steps. Both tools run in Docker, pinned by image digest.
+It lints only the files git tracks (`git ls-files`), so untracked and ignored files such as `tests/local/` are left out. Among them, the shell scripts (any `*.sh` file, or any file whose `#!` line names sh, dash or bash) are checked with ShellCheck in POSIX mode (`-s sh`), and the workflows (`.github/workflows/*.yml` and `*.yaml`) with actionlint, which also runs ShellCheck on each workflow's `run:` steps. It fails if it finds no shell scripts or no workflows. Both tools run in Docker, pinned by image digest.
 
 actionlint 1.7.12 does not know the `job.workflow_repository` and `job.workflow_sha` properties, which GitHub documents. `.github/actionlint.yaml` ignores only that error, and only in `.github/workflows/verify-commit-signatures.yml`.
 
@@ -169,4 +183,4 @@ When a pull request's head shares no history with its base, the compare endpoint
 
 5xx answers, rate limits (HTTP 429, a 403 with `X-RateLimit-Remaining: 0` or `Retry-After`, or a GraphQL `RATE_LIMITED` error) and calls with no answer (gh fails before GitHub answers, as on a network failure) are retried twice, after 10 and then 30 seconds. If they still fail, the script exits 2. gh failing because it has no login or token (gh exit 4) is not retried, since running again won't help. That, and any other failure, exits 3 at once.
 
-Annotations are escaped the way `actions/toolkit` escapes workflow commands: `%`, carriage return and line feed in the message become `%25`, `%0D` and `%0A`, and the title also escapes `:` and `,`.
+Annotations are escaped the way `actions/toolkit` escapes workflow commands: `%`, carriage return and line feed in the message become `%25`, `%0D` and `%0A`, and the title also escapes `:` and `,`. Other control characters become spaces. The error annotation for an exit 2 or 3 carries the error line, which has every control character, line feeds included, as a space, so only its `%` needs escaping.

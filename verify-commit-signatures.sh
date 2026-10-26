@@ -16,6 +16,10 @@
 #   2   GitHub's answer was still 5xx, rate-limited or no answer after retries
 #   3   the commits could not be fetched or read, or the data was missing or unexpected
 #   64  bad usage
+#   130 interrupted (SIGINT or SIGTERM)
+#
+# In GitHub Actions (GITHUB_ACTIONS=true) each failing commit, and the error
+# behind an exit 2 or 3, is also printed as an ::error annotation.
 #
 # Requires gh (authenticated, or GH_TOKEN set) and jq.
 
@@ -28,6 +32,11 @@ RETRY_DELAYS="10 30"
 PAGE_SIZE=100
 CHUNK_SIZE=100
 
+annotate=false
+if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+  annotate=true
+fi
+
 usage() {
   if [ $# -gt 0 ]; then
     printf 'error: %s\n' "$1" >&2
@@ -39,9 +48,33 @@ EOF
   exit 64
 }
 
+# one_line TEXT
+# Prints TEXT with every control character (line feeds included) as a space.
+one_line() {
+  printf '%s' "$1" | tr '\n\r\t' '   ' | LC_ALL=C sed 's/[[:cntrl:]]/ /g'
+}
+
+# die CODE MESSAGE
+# Prints the error on one line and exits with CODE (2 or 3). In GitHub Actions
+# the error is also an ::error annotation; the message has no control
+# characters left, so only % needs escaping for the workflow command.
+die() {
+  local message title
+  message=$(one_line "$2")
+  printf 'error: %s\n' "$message" >&2
+  if [ "$annotate" = "true" ]; then
+    if [ "$1" -eq 2 ]; then
+      title="Signature check could not reach GitHub"
+    else
+      title="Signature check could not read the commits"
+    fi
+    printf '::error title=%s::%s\n' "$title" "$(printf '%s' "$message" | sed 's/%/%25/g')"
+  fi
+  exit "$1"
+}
+
 fail_data() {
-  printf 'error: %s\n' "$1" >&2
-  exit 3
+  die 3 "$1"
 }
 
 matches() {
@@ -130,15 +163,14 @@ api_try() {
         ;;
       '')
         if [ "$rc" -ne 0 ] && [ "$rc" -ne 4 ]; then
-          transient="gave no answer ($(head -n 1 "$work/err" | cut -c1-200))"
+          transient="gave no answer ($(one_line "$(head -n 1 "$work/err" | cut -c1-200)"))"
         fi
         ;;
     esac
 
     if [ -n "$transient" ]; then
       if [ "$attempt" -ge "$ATTEMPTS" ]; then
-        printf 'error: GitHub still %s after %s attempts\n' "$transient" "$ATTEMPTS" >&2
-        exit 2
+        die 2 "GitHub still $transient after $ATTEMPTS attempts"
       fi
       delay=${delays%% *}
       delays=${delays#* }
@@ -161,8 +193,7 @@ request_failed() {
   local message
   message=$(jq -r '.message // .errors[0].message // empty' "$1" 2>/dev/null | head -n 1)
   [ -n "$message" ] || message=$(head -c 500 "$work/err")
-  printf 'error: GitHub request failed (HTTP %s): %s\n' "${api_status:-no answer}" "$message" >&2
-  exit 3
+  die 3 "GitHub request failed (HTTP ${api_status:-no answer}): $message"
 }
 
 # api OUTFILE GH_API_ARGS...
@@ -338,18 +369,23 @@ jq -nr --rawfile shas "$work/shas" --slurpfile results "$work/results" '
     if .committer.user != null then .committer.user.login
     else "\(.committer.name) <\(.committer.email)> (no GitHub account)" end;
 
-  # A field of a tab-separated record: tabs, carriage returns and line feeds
-  # in the data from GitHub become spaces, so each commit stays on one line.
-  def field: gsub("[\t\r\n]"; " ");
+  # A field of a tab-separated record: every control character in the data
+  # from GitHub (U+0000 to U+001F, and U+007F) becomes a space, so each commit
+  # stays on one line and no terminal escape reaches the log.
+  def field: gsub("[\\x00-\\x1F\\x7F]"; " ");
 
   # Escaping for GitHub workflow commands, as actions/toolkit does it: escape_data
   # for the message, escape_property for parameters such as title.
   def escape_data: gsub("%"; "%25") | gsub("\r"; "%0D") | gsub("\n"; "%0A");
   def escape_property: escape_data | gsub(":"; "%3A") | gsub(","; "%2C");
 
+  # Control characters other than carriage return and line feed (which the
+  # escaping above encodes) become spaces.
+  def other_controls: gsub("[\\x00-\\x09\\x0B\\x0C\\x0E-\\x1F\\x7F]"; " ");
+
   # The ::error workflow command for a failing commit.
   def annotation($sha; $j):
-    "::error title=\("Commit \($sha[0:7]) failed rule \($j.rule)" | escape_property)::\("\($sha[0:7]): \($j.reason)" | escape_data)";
+    "::error title=\("Commit \($sha[0:7]) failed rule \($j.rule)" | other_controls | escape_property)::\("\($sha[0:7]): \($j.reason)" | other_controls | escape_data)";
 
   def judge:
     .signature as $g
@@ -405,11 +441,6 @@ fi
 # In GitHub Actions, each failing commit also gets an ::error annotation, which
 # shows on the pull request's checks without opening the log. The runner shows
 # at most 10 error annotations per step; the log still lists every commit.
-annotate=false
-if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
-  annotate=true
-fi
-
 printf 'Checking %s commits in %s (%s...%s)\n' "$count" "$repo" "$base" "$head"
 passed=0
 failed=0

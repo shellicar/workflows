@@ -1,0 +1,1 @@
+Control characters in GitHub's data (NUL, BEL, ESC and DEL in a committer's name and email, ESC in a signer's login) are shown as spaces in the per-commit lines and annotations, so none reaches the log.

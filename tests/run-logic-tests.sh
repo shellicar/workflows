@@ -3,7 +3,8 @@
 # stub gh that answers from the case's response files, and compares the exit
 # code, the number of GitHub calls, the retry delays, each commit's verdict and
 # failed rule, and any workflow command lines (::error ...) with the case's
-# expected file. No network is used.
+# expected file, and fails any case whose output carries a control character.
+# No network is used.
 #
 # Usage: run-logic-tests.sh [CASE...]
 #   SH  the shell that runs the script under test (default: sh)
@@ -61,6 +62,13 @@ for dir in $cases; do
       -e 's/^\([0-9a-f]\{7\}\) FAIL  .*  rule=\([a-z-]*\): .*$/\1 FAIL \2/p' \
       -e '/^::/p' \
       "$state/stdout"
+    # Everything the script prints reaches the log, which must carry no
+    # control characters other than the line ends.
+    for stream in stdout stderr; do
+      if LC_ALL=C grep -q '[[:cntrl:]]' "$state/$stream"; then
+        echo "control characters in $stream"
+      fi
+    done
   } >"$state/actual"
 
   if diff "$dir/expected" "$state/actual" >"$state/diff"; then

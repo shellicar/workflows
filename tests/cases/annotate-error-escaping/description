@@ -1,0 +1,1 @@
+In GitHub Actions, an error message with a %, a line feed and terminal escapes is printed on one line with the control characters as spaces, and its annotation escapes the % as %25.

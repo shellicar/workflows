@@ -1,0 +1,33 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "a000001000000000000000000000000000000000",
+        "committer": {
+          "name": "Eve\u0000 \u001b[31mExample\u0007",
+          "email": "eve@example.com\u007f",
+          "user": null
+        },
+        "signature": null
+      },
+      "c1": {
+        "oid": "a000002000000000000000000000000000000000",
+        "committer": {
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "user": {
+            "login": "alice"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "mallory\u001b[0m"
+          }
+        }
+      }
+    }
+  }
+}

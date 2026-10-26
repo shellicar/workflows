@@ -1,0 +1,4 @@
+HTTP/2.0 404 Not Found
+Content-Type: application/json; charset=utf-8
+
+{"message":"No common ancestor between b000000000000000000000000000000000000000 and e000000000000000000000000000000000000000.","documentation_url":"https://docs.github.com/rest/commits/commits#compare-two-commits","status":"404"}
