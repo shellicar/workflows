@@ -1,0 +1,1 @@
+Synthetic: the owner's commits signed with a valid key, a key whose email does not match (BAD_EMAIL), and a key GitHub does not know (UNKNOWN_KEY)

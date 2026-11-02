@@ -1,0 +1,4 @@
+exit 1
+calls 2
+a000001 FAIL signed
+a000002 PASS

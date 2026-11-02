@@ -1,0 +1,4 @@
+HTTP/2.0 403 Forbidden
+X-Ratelimit-Remaining: 0
+
+{"message":"API rate limit exceeded"}

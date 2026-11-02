@@ -1,0 +1,9 @@
+exit 1
+calls 2
+c000001 FAIL signed
+c000002 FAIL signed
+c000003 FAIL signed
+c000004 FAIL signed
+c000005 FAIL signed
+c000006 FAIL signed
+c000007 FAIL signed

@@ -1,0 +1,899 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "a000101000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c1": {
+        "oid": "a000102000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c2": {
+        "oid": "a000103000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c3": {
+        "oid": "a000104000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c4": {
+        "oid": "a000105000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c5": {
+        "oid": "a000106000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c6": {
+        "oid": "a000107000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c7": {
+        "oid": "a000108000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c8": {
+        "oid": "a000109000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c9": {
+        "oid": "a000110000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c10": {
+        "oid": "a000111000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c11": {
+        "oid": "a000112000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c12": {
+        "oid": "a000113000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c13": {
+        "oid": "a000114000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c14": {
+        "oid": "a000115000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c15": {
+        "oid": "a000116000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c16": {
+        "oid": "a000117000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c17": {
+        "oid": "a000118000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c18": {
+        "oid": "a000119000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c19": {
+        "oid": "a000120000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": null
+      },
+      "c20": {
+        "oid": "a000121000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c21": {
+        "oid": "a000122000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c22": {
+        "oid": "a000123000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c23": {
+        "oid": "a000124000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c24": {
+        "oid": "a000125000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c25": {
+        "oid": "a000126000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c26": {
+        "oid": "a000127000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c27": {
+        "oid": "a000128000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c28": {
+        "oid": "a000129000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c29": {
+        "oid": "a000130000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c30": {
+        "oid": "a000131000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c31": {
+        "oid": "a000132000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c32": {
+        "oid": "a000133000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c33": {
+        "oid": "a000134000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c34": {
+        "oid": "a000135000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c35": {
+        "oid": "a000136000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c36": {
+        "oid": "a000137000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c37": {
+        "oid": "a000138000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c38": {
+        "oid": "a000139000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c39": {
+        "oid": "a000140000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c40": {
+        "oid": "a000141000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c41": {
+        "oid": "a000142000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c42": {
+        "oid": "a000143000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c43": {
+        "oid": "a000144000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c44": {
+        "oid": "a000145000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c45": {
+        "oid": "a000146000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c46": {
+        "oid": "a000147000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c47": {
+        "oid": "a000148000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c48": {
+        "oid": "a000149000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      },
+      "c49": {
+        "oid": "a000150000000000000000000000000000000000",
+        "committer": {
+          "name": "Example Person",
+          "email": "person@example.com",
+          "user": {
+            "login": "example-user"
+          }
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": false,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      }
+    }
+  }
+}

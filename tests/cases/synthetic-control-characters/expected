@@ -1,0 +1,6 @@
+exit 1
+calls 2
+a000001 FAIL signed
+::error title=Commit a000001 failed rule signed::a000001: the commit is not signed
+a000002 FAIL key-matches-committer
+::error title=Commit a000002 failed rule key-matches-committer::a000002: the key belongs to mallory [0m, but the committer is alice

@@ -1,0 +1,7 @@
+# actionlint settings, read by scripts/lint.sh.
+paths:
+  # actionlint 1.7.12 does not know the job context's workflow_repository and
+  # workflow_sha properties, which GitHub documents and the runner provides.
+  .github/workflows/verify-commit-signatures.yml:
+    ignore:
+      - 'property "workflow_(repository|sha)" is not defined in object type'

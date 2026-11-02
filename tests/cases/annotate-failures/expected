@@ -1,0 +1,9 @@
+exit 1
+calls 2
+d000001 PASS
+d000002 FAIL signed
+::error title=Commit d000002 failed rule signed::d000002: the commit is not signed
+d000003 FAIL valid
+::error title=Commit d000003 failed rule valid::d000003: GitHub reports the signature as BAD_EMAIL, not VALID
+d000004 FAIL key-matches-committer
+::error title=Commit d000004 failed rule key-matches-committer::d000004: the key belongs to alice, but the committer is carol

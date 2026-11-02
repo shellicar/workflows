@@ -1,0 +1,1 @@
+Annotations are printed only when GITHUB_ACTIONS is exactly true; here it is false.

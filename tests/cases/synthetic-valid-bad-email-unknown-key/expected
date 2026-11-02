@@ -1,0 +1,5 @@
+exit 1
+calls 2
+a000001 PASS
+a000002 FAIL valid
+a000003 FAIL valid

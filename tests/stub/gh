@@ -1,0 +1,40 @@
+#!/bin/sh
+# Stands in for gh in the logic tests. Each call is answered with the case's
+# next response, in order: responses/N.json is served as an HTTP 200 answer,
+# responses/N.http is served as written (status line, headers, blank line,
+# body). responses/N.exit, when present, sets gh's exit status; otherwise it is
+# 0 for a 200 answer and 1 for anything else. A call with neither response
+# file prints nothing to stdout and exits 1, as gh does when it reaches no
+# server, or with responses/N.exit when present; responses/N.stderr, when
+# present, is what it prints to stderr.
+#
+# STUB_CASE is the case directory; STUB_STATE is a directory for the call log.
+
+n=$(( $(cat "$STUB_STATE/count" 2>/dev/null || echo 0) + 1 ))
+echo "$n" >"$STUB_STATE/count"
+printf '%s\n' "$*" >>"$STUB_STATE/calls"
+
+r="$STUB_CASE/responses/$n"
+if [ -f "$r.json" ]; then
+  printf 'HTTP/2.0 200 OK\r\nContent-Type: application/json; charset=utf-8\r\n\r\n'
+  cat "$r.json"
+  code=0
+elif [ -f "$r.http" ]; then
+  cat "$r.http"
+  case $(head -n 1 "$r.http") in
+    'HTTP/'*' 200 '*) code=0 ;;
+    *) code=1 ;;
+  esac
+else
+  if [ -f "$r.stderr" ]; then
+    cat "$r.stderr" >&2
+  else
+    printf 'stub gh: no response %s for this case\n' "$n" >&2
+  fi
+  code=1
+fi
+
+if [ -f "$r.exit" ]; then
+  code=$(cat "$r.exit")
+fi
+exit "$code"

@@ -1,0 +1,4 @@
+exit 0
+calls 3
+sleeps 10
+a000001 PASS

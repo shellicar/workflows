@@ -1,0 +1,1 @@
+Base and head share no history, and head's history lists 2 commits but reports 3, with no further page; the commit count check fails the run.

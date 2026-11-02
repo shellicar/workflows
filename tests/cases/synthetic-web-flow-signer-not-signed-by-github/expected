@@ -1,0 +1,3 @@
+exit 1
+calls 2
+a000001 FAIL key-matches-committer

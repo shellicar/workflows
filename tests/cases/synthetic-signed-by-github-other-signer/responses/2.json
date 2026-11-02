@@ -1,0 +1,22 @@
+{
+  "data": {
+    "repository": {
+      "c0": {
+        "oid": "a000001000000000000000000000000000000000",
+        "committer": {
+          "name": "GitHub",
+          "email": "noreply@github.com",
+          "user": null
+        },
+        "signature": {
+          "state": "VALID",
+          "isValid": true,
+          "wasSignedByGitHub": true,
+          "signer": {
+            "login": "example-user"
+          }
+        }
+      }
+    }
+  }
+}
